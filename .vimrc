@@ -1,0 +1,153 @@
+set nocompatible               " be iMproved
+filetype off                   " required!
+set shell=/bin/bash            " otherwise it tries to use fish
+
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" let Vundle manage Vundle
+Bundle 'gmarik/vundle'
+
+Bundle 'wting/rust.vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'majutsushi/tagbar'
+Bundle 'int3/vim-extradite'
+Bundle 'Shougo/vimproc.vim'
+Bundle 'Shougo/unite.vim'
+Bundle 'fatih/vim-go'
+Bundle 'Shougo/neocomplete.vim'
+Bundle 'scrooloose/nerdcommenter'
+Bundle 'Lokaltog/vim-distinguished'
+Bundle 'Lokaltog/vim-powerline'
+Bundle 'scrooloose/syntastic'
+Bundle 'stephpy/vim-yaml'
+Bundle 'skammer/vim-css-color'
+Bundle 'plasticboy/vim-markdown'
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'groenewege/vim-less.git'
+Bundle 'puppetlabs/puppet-syntax-vim'
+Bundle 'davidhalter/jedi-vim'
+
+Bundle 'matchit.zip'
+Bundle 'BufClose.vim'
+Bundle 'surround.vim'
+Bundle 'rainbow_parentheses.vim'
+
+filetype plugin indent on     " required!
+
+set hidden              " Allow more than one buffer open at a time
+set autoindent      " Copy current indent level to newline
+set smartindent     " Smart indent / oudent based on context (extra indent level after a if (...) { for example
+set incsearch       " Search as you type
+set nohlsearch      " Do not highlight all search results
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab       " Fuck hard tabs
+set autoread
+set history=1000
+set synmaxcol=400
+set ignorecase
+set smartcase
+set title
+set gdefault
+set relativenumber
+set cursorline
+set laststatus=2
+set wildmenu
+set wildmode=list:longest
+set showmatch       " Automatically highlight matching braces
+
+let mapleader=","   " Much easier to hit than /
+
+"fix regex searching
+nnoremap / /\v
+vnoremap / /\v
+
+nnoremap ; :        " Much easier to hit than shift+:
+
+"visual line movements - makes working with wrapped lines easier
+:map j gj
+:map k gk
+:map ' `
+
+"autosave on lost focus
+:au FocusLost * silent! wa
+
+" Shortcut to reformat entire file
+:nmap <Leader>F mxgg=G`x
+
+" Unite settings
+call unite#filters#matcher_default#use(['matcher_fuzzy'])
+
+" Use 'ag' for searching project
+let g:unite_source_grep_command = 'ag'
+let g:unite_source_grep_default_opts = '--line-numbers --nocolor --nogroup'
+
+nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
+nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
+nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
+nnoremap <leader>y :<C-u>Unite -no-split -buffer-name=yank    history/yank<cr>
+nnoremap <leader>b :<C-u>Unite -no-split -buffer-name=buffer  buffer<cr>
+nnoremap <leader>/ :<C-u>Unite -buffer-name=search grep:.<cr>
+
+"Kill runaway fugitives
+autocmd BufReadPost fugitive://* set bufhidden=delete
+
+"Twitter shortcuts
+"nnoremap <leader>mp :PosttoTwitter<CR>
+"nnoremap <leader>mm :MentionsTwitter<CR>
+
+set exrc
+set secure
+
+if has("gui_running")
+	set guifont=Monaco:h16
+	:colorscheme distinguished
+	set background=dark
+	set guioptions-=T
+	set guioptions-=m
+else
+	set t_Co=256 "Ensure 256 colors
+endif
+
+" No more littering
+set backup
+set backupdir=~/.vimruntime/backup
+set directory=~/.vimruntime/temp
+
+" Undo across file closes
+set undofile
+set undodir=~/.vimruntime/undodir
+set undolevels=1000
+set undoreload=10000
+
+"Syntastic
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
+
+"BufClose aliasing. I wanted :bc but apparently that's a no go (or more
+"probably, I just don't know enough vim scripting)
+nnoremap <leader>wk :BufClose<CR>
+nnoremap <leader>wd :bd<CR>
+
+" Shortcut for search/replace
+nnoremap <Leader>gs :perldo s//g<left><left>
+
+" disable arrow keys
+map <up> <nop>
+map <down> <nop>
+map <left> <nop>
+map <right> <nop>
+
+" Set list should show individual characters
+:set listchars=eol:$,tab:>-,trail:~,extends:>,precedes:<
+
+" Rainbow!
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadBraces
+au Syntax * RainbowParenthesesLoadSquare
+nnoremap <leader>R :RainbowParenthesesToggle<CR>
+
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'javascript', 'java'] }
