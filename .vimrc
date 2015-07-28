@@ -18,7 +18,7 @@ Bundle 'fatih/vim-go'
 Bundle 'Shougo/neocomplete.vim'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'Lokaltog/vim-distinguished'
-Bundle 'Lokaltog/vim-powerline'
+Bundle 'bling/vim-airline'
 Bundle 'scrooloose/syntastic'
 Bundle 'stephpy/vim-yaml'
 Bundle 'skammer/vim-css-color'
@@ -27,11 +27,14 @@ Bundle 'Lokaltog/vim-easymotion'
 Bundle 'groenewege/vim-less.git'
 Bundle 'puppetlabs/puppet-syntax-vim'
 Bundle 'davidhalter/jedi-vim'
+Bundle 'jaxbot/semantic-highlight.vim'
+
 
 Bundle 'matchit.zip'
 Bundle 'BufClose.vim'
 Bundle 'surround.vim'
 Bundle 'rainbow_parentheses.vim'
+Bundle 'gitignore'
 
 filetype plugin indent on     " required!
 
@@ -51,12 +54,16 @@ set ignorecase
 set smartcase
 set title
 set gdefault
-set relativenumber
-set cursorline
+set relativenumber  " Number lines relatively based on diff from current location.
+set cursorline      " Highlight line cursor is currently on
 set laststatus=2
 set wildmenu
 set wildmode=list:longest
 set showmatch       " Automatically highlight matching braces
+
+
+" When you open a file as normal user but need to sudo to write to it
+cmap w!! w !sudo tee % >/dev/null
 
 let mapleader=","   " Much easier to hit than /
 
@@ -80,11 +87,15 @@ nnoremap ; :        " Much easier to hit than shift+:
 " Unite settings
 call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
+call unite#custom#source('file_rec', 'ignore_globs', split(&wildignore, ','))
+
 " Use 'ag' for searching project
 let g:unite_source_grep_command = 'ag'
 let g:unite_source_grep_default_opts = '--line-numbers --nocolor --nogroup'
 
-nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async:!<cr>
+
+nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async<cr>
+"nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async<cr>
 nnoremap <leader>f :<C-u>Unite -no-split -buffer-name=files   -start-insert file<cr>
 nnoremap <leader>r :<C-u>Unite -no-split -buffer-name=mru     -start-insert file_mru<cr>
 nnoremap <leader>o :<C-u>Unite -no-split -buffer-name=outline -start-insert outline<cr>
@@ -150,4 +161,8 @@ au Syntax * RainbowParenthesesLoadBraces
 au Syntax * RainbowParenthesesLoadSquare
 nnoremap <leader>R :RainbowParenthesesToggle<CR>
 
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'javascript', 'java'] }
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['html', 'javascript', 'java', 'eruby'] }
+
+" Jedi!
+" Turn off docstring automatically popping up
+autocmd FileType python setlocal completeopt-=preview
