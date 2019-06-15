@@ -1,0 +1,27 @@
+#!/bin/bash -l
+
+# Tiny venv wrapper that does *exactly* what I want
+# 1. Put venvs in a central location, based on name of
+#    current directory. I put all my code under ~/code,
+#    so this works for me.
+# 2. If a venv doesn't exist for the current directory,
+#    create and activate it.
+# 3. If a venv does exist, just activate it.
+#
+# You can get out of it with the venv standard `deactivate`
+set -euo pipefail
+
+VENV_NAME=$(basename $(pwd))
+VENV_BASE_DIR=${HOME}/.local/share/virtualenvs
+VENV_PATH=${VENV_BASE_DIR}/${VENV_NAME}
+
+if [ ! -f ${VENV_PATH} ]; then
+    python3 -m venv ${VENV_PATH}
+fi
+
+source ${VENV_PATH}/bin/activate
+
+# Login shells should never have `-e` set, otherwise they
+# will die every time you have an interactive command
+# that has a non-zero exit code
+set +euo pipefail

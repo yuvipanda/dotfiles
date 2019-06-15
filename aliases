@@ -1,0 +1,3 @@
+#!/bin/bash
+# Aliases I like
+alias venv-gimme="source ~/code/dotfiles/venv-gimme-script"
