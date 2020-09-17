@@ -2,40 +2,6 @@ set nocompatible               " be iMproved
 filetype off                   " required!
 set shell=/bin/bash            " otherwise it tries to use fish
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-
-" let Vundle manage Vundle
-Bundle 'gmarik/vundle'
-
-Bundle 'wting/rust.vim'
-Bundle 'tpope/vim-fugitive'
-Bundle 'majutsushi/tagbar'
-Bundle 'int3/vim-extradite'
-Bundle 'Shougo/vimproc.vim'
-Bundle 'Shougo/unite.vim'
-Bundle 'fatih/vim-go'
-Bundle 'Shougo/neocomplete.vim'
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'Lokaltog/vim-distinguished'
-Bundle 'bling/vim-airline'
-Bundle 'scrooloose/syntastic'
-Bundle 'stephpy/vim-yaml'
-Bundle 'skammer/vim-css-color'
-Bundle 'plasticboy/vim-markdown'
-Bundle 'Lokaltog/vim-easymotion'
-Bundle 'groenewege/vim-less.git'
-Bundle 'puppetlabs/puppet-syntax-vim'
-Bundle 'davidhalter/jedi-vim'
-Bundle 'jaxbot/semantic-highlight.vim'
-
-
-Bundle 'matchit.zip'
-Bundle 'BufClose.vim'
-Bundle 'surround.vim'
-Bundle 'rainbow_parentheses.vim'
-Bundle 'gitignore'
-
 filetype plugin indent on     " required!
 
 set hidden              " Allow more than one buffer open at a time
@@ -83,15 +49,6 @@ nnoremap ; :        " Much easier to hit than shift+:
 
 " Shortcut to reformat entire file
 :nmap <Leader>F mxgg=G`x
-
-" Unite settings
-call unite#filters#matcher_default#use(['matcher_fuzzy'])
-
-call unite#custom#source('file_rec', 'ignore_globs', split(&wildignore, ','))
-
-" Use 'ag' for searching project
-let g:unite_source_grep_command = 'ag'
-let g:unite_source_grep_default_opts = '--line-numbers --nocolor --nogroup'
 
 
 nnoremap <leader>t :<C-u>Unite -no-split -buffer-name=files   -start-insert file_rec/async<cr>
