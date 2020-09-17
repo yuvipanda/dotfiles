@@ -1,3 +1,70 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 # Aliases I like
 alias venv-gimme="source ~/code/dotfiles/venv-gimme-script"
+alias k="kubectl"
+
+# Drain a node that is probably running jupyter things
+k-drain() {
+    # We always wanna ignore daemonsets, duh
+    # Disabling evictions lets us ignore PodDisruptionBudgets
+    # delete-local-data lets us get rid of pods with emptyDirs
+    # force is needed to delete user pods - they aren't managed by anything else
+    k drain --ignore-daemonsets --disable-eviction --delete-local-data --force $@
+}
+
+wk() {
+    # I watch kubernetes resources all the time
+    # I can do things like `wk 'get node | rg -v user'`
+    /usr/local/bin/watch "kubectl $@"
+}
+
+k-non-running-pods() {
+    k get pod -A | rg -v Running
+}
+
+w() {
+    # Default 'watch' doesn't support shell aliases
+    # THIS ONE DOES
+    /usr/local/bin/watch "$SHELL -ic '$@'"
+}
+
+# Get names of kubernetes objects filtered by default output
+# Often, you wanna get list of names of a kind of object, so you can
+# pass it to something else. For example, you wanna drain all nodes
+# that are user nodes. You can do this with some awk and grep.
+# it is suhc a common occurance, this alias just streamlines it.
+k-g-n() {
+    KIND="$1"
+    # Remove kind from $@
+    shift 1
+    # Everything other than the first item is passed to rg
+    FILTER="$@"
+    # FIXME: Not sure how to pass everything, including options, to rg without a subshell
+    k get ${KIND} --no-headers | $SHELL -c "rg ${FILTER}" | awk '{ print $1 }'
+}
+
+alias kuts="kubectl -n utoronto-staging"
+alias kutp="kubectl -n utoronto-prod"
+
+hub-exec() {
+    NAMESPACE=$1
+    HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub)"
+    k -n ${NAMESPACE} exec -it ${HUB_NAME} -c hub -- /bin/bash
+}
+
+hub-logs() {
+    NAMESPACE=$1
+    shift 1
+    HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub)"
+    k -n ${NAMESPACE} logs ${HUB_NAME} -c hub $@
+}
+
+ucb-datahub-2018() {
+    gcloud config set account yuvipanda@gmail.com
+    gcloud config set project ucb-datahub-2018
+    k config use-context gke_ucb-datahub-2018_us-central1_fall-2019
+}
+
+2i2c-utoronto() {
+    k config use-context jupyterhub-2i2c-cluster
+}
