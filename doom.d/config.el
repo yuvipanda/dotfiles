@@ -38,7 +38,11 @@
 ;; M-x is also gonna be used far more than eval buffer
 (map! :leader :desc "M-x" ";" #'execute-extended-command)
 (map! :leader :desc "Eval expression" ":" #'pp-eval-expression)
+;; Each project should almost always have its own terminal
+;; I wanna be able to switch to this terminal very quickly
+(map! :leader :desc "Open Terminal for Project" "t t" #'projectile-run-vterm)
 ;;
+
 ;; This is where all my 'projects' are.
 ;; I can switch between them easily without having to manually open them
 (setq projectile-project-search-path '("~/code/"))
