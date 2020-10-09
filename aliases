@@ -87,3 +87,9 @@ ucb-datahub-2018() {
 2i2c-utoronto() {
     k config use-context jupyterhub-2i2c-cluster
 }
+
+2i2c-low-touch() {
+    gcloud config set account yuvipanda@gmail.com
+    gcloud config set project two-eye-two-see
+    k config use-context gke_two-eye-two-see_us-central1_low-touch-hubs-cluster
+}
