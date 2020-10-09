@@ -46,17 +46,36 @@ k-g-n() {
 alias kuts="kubectl -n utoronto-staging"
 alias kutp="kubectl -n utoronto-prod"
 
+# Resolve a namespace to -prod or -staging
+# We mostly wanna look at things in staging, but sometimes in prod too
+hub-namespace-resolve () {
+    NAMESPACE_SPEC="$1"
+    echo -n $NAMESPACE_SPEC | rg '\-staging$' > /dev/null && echo -n ${NAMESPACE_SPEC} || echo -n "${NAMESPACE_SPEC}-prod"
+}
+
 hub-exec() {
-    NAMESPACE=$1
+    NAMESPACE=$(hub-namespace-resolve $1)
     HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub)"
     k -n ${NAMESPACE} exec -it ${HUB_NAME} -c hub -- /bin/bash
 }
 
 hub-logs() {
-    NAMESPACE=$1
+    NAMESPACE=$(hub-namespace-resolve $1)
     shift 1
     HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub)"
     k -n ${NAMESPACE} logs ${HUB_NAME} -c hub $@
+}
+
+hub-list-user-pods() {
+    NAMESPACE=$(hub-namespace-resolve $1)
+    shift 1
+    k -n ${NAMESPACE} get pod -l component=singleuser-server $@
+}
+
+hub-list-core-pods() {
+    NAMESPACE=$(hub-namespace-resolve $1)
+    shift 1
+    k -n ${NAMESPACE} get pod $@ | rg -v 'jupyter-|user-placeholder'
 }
 
 ucb-datahub-2018() {
