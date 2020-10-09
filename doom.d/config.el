@@ -48,6 +48,9 @@
 ;; I can switch between them easily without having to manually open them
 (setq projectile-project-search-path '("~/code/"))
 
+;; GitHub tokens for magit forge are here
+(setq auth-sources '("~/.authinfo"))
+
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
