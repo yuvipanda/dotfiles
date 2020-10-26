@@ -14,6 +14,14 @@
 ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
 ;;      directory (for easy access to its source code).
 
+
+;; From https://www.baty.net/2020/respecting-visual-lines-in-doom-emacs/
+(use-package-hook! evil
+  :pre-init
+  (setq evil-respect-visual-line-mode t) ;; sane j and k behavior
+  t)
+
+
 (doom! :input
        ;;chinese
        ;;japanese
