@@ -48,3 +48,10 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+(package! jsonnet-mode)
+
+(use-package! jsonnet-mode
+  :mode "\\.jsonnet\\'"
+  :config
+  (set-electric! 'json-mode :chars '(?\n ?: ?{ ?}))
+  (setq jsonnet-library-search-directories '("vendor")))
