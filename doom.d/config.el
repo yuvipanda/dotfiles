@@ -9,8 +9,8 @@
 (setq user-full-name "YuviPanda"
       user-mail-address "yuvipanda@gmail.com")
 
-(setq doom-font (font-spec :family "JetBrains Mono" :size 14)
-      doom-big-font (font-spec :family "JetBrains Mono" :size 20))
+(setq doom-font (font-spec :family "Input Mono" :size 14)
+      doom-big-font (font-spec :family "Input Mono" :size 20))
 
 (setq lsp-python-ms-executable
       "~/code/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer")
