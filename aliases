@@ -48,15 +48,30 @@ alias kutp="kubectl -n utoronto-prod"
 
 # Resolve a namespace to -prod or -staging
 # We mostly wanna look at things in staging, but sometimes in prod too
+# FIXME: But in pilot hubs, we don't have -stagin hubs.
+# Temporarily killing automatic resolution until that is fixed
 hub-namespace-resolve () {
-    NAMESPACE_SPEC="$1"
-    echo -n $NAMESPACE_SPEC | rg '\-staging$' > /dev/null && echo -n ${NAMESPACE_SPEC} || echo -n "${NAMESPACE_SPEC}-prod"
+    echo -n "${1}"
+    # NAMESPACE_SPEC="$1"
+    # echo -n $NAMESPACE_SPEC | rg '\-staging$' > /dev/null && echo -n ${NAMESPACE_SPEC} || echo -n "${NAMESPACE_SPEC}-prod"
 }
 
 hub-exec() {
     NAMESPACE=$(hub-namespace-resolve $1)
     HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub)"
     k -n ${NAMESPACE} exec -it ${HUB_NAME} -c hub -- /bin/bash
+}
+
+hub-scp-to() {
+    NAMESPACE=$(hub-namespace-resolve $1)
+    HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub | sed 's/pod\///')"
+    k -n ${NAMESPACE} cp ${2} ${HUB_NAME}:${3} -c hub
+}
+
+hub-scp-from() {
+    NAMESPACE=$(hub-namespace-resolve $1)
+    HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub | sed 's/pod\///')"
+    k -n ${NAMESPACE} cp ${HUB_NAME}:${2} ${3}  -c hub
 }
 
 hub-logs() {
@@ -78,6 +93,32 @@ hub-list-core-pods() {
     k -n ${NAMESPACE} get pod $@ | rg -v 'jupyter-|user-placeholder'
 }
 
+kill-pods-like() {
+    NAMESPACE="${1}"
+    shift 1
+    k -n ${NAMESPACE} get pod | rg $@ | awk '{ print $1 }' | parallel -j8 kubectl -n ${NAMESPACE} delete pod --grace-period=1
+}
+
+pod-logs-like() {
+    NAMESPACE="${1}"
+    # FIXME: Find a way to pass options to rg?
+    POD_PATTERN="${2}"
+    shift 2
+    POD_NAME="$(k -n ${NAMESPACE} get pod | rg ${POD_PATTERN} | awk '{ print $1; }')"
+    k -n ${NAMESPACE} logs ${POD_NAME} $@
+
+}
+
+pods-all-jupyter() {
+    k get pod -A | rg jupyter- $@
+}
+
+ucb-data8x() {
+    gcloud config set account yuvipanda@gmail.com
+    gcloud config set project data8x-scratch
+    k config use-context gke_data8x-scratch_us-central1_data8x-2019-02-20
+}
+
 ucb-datahub-2018() {
     gcloud config set account yuvipanda@gmail.com
     gcloud config set project ucb-datahub-2018
@@ -91,11 +132,17 @@ ucb-datahub-2018() {
 2i2c-low-touch() {
     gcloud config set account yuvipanda@gmail.com
     gcloud config set project two-eye-two-see
-    k config use-context gke_two-eye-two-see_us-central1_low-touch-hubs-cluster
+    k config use-context gke_two-eye-two-see_us-central1-b_low-touch-hubs-cluster
 }
 
 2i2c-cloudbank() {
     gcloud config set account yuvipanda@gmail.com
     gcloud config set project cb-1003-1696
     k config use-context gke_cb-1003-1696_us-central1-b_cloudbank-2i2c-cluster
+}
+
+2i2c-hackathon-alpha() {
+    gcloud config set account yuvipanda@gmail.com
+    gcloud config set project  hackathon-2i2c-project-alpha
+    k config use-context gke_hackathon-2i2c-project-alpha_us-central1-b_alpha-cluster
 }
