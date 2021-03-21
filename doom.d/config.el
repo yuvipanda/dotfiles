@@ -12,8 +12,6 @@
 (setq doom-font (font-spec :family "JetBrains Mono" :size 14)
       doom-big-font (font-spec :family "JetBrains Mono" :size 20))
 
-(setq lsp-python-ms-executable
-      "~/code/python-language-server/output/bin/Release/osx-x64/publish/Microsoft.Python.LanguageServer")
 
 ;;
 ;; Something slightly more bright than the default
