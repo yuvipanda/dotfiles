@@ -47,6 +47,8 @@
 ;; GitHub tokens for magit forge are here
 (setq auth-sources '("~/.authinfo"))
 
+;; CSS indents to 2, since that's what tserver does by default
+(setq css-indent-offset 2)
 ;; Here are some additional functions/macros that could help you configure Doom:
 ;;
 ;; - `load!' for loading external *.el files relative to this one
