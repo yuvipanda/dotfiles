@@ -12,10 +12,8 @@
 (setq doom-font (font-spec :family "JetBrains Mono" :size 14)
       doom-big-font (font-spec :family "JetBrains Mono" :size 20))
 
-
-;;
-;; Something slightly more bright than the default
-;; (setq doom-theme "doom-one")
+;; This theme looks good?
+(load-theme 'darktooth t)
 ;;
 ;; Relative line numbering is far more useful than absolute
 (setq doom-line-numbers-style 'relative)

@@ -55,3 +55,7 @@
   :config
   (set-electric! 'json-mode :chars '(?\n ?: ?{ ?}))
   (setq jsonnet-library-search-directories '("vendor")))
+
+(package! color-theme-sanityinc-tomorrow)
+(package! twilight-theme)
+(package! darktooth-theme)
