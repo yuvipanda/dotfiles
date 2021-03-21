@@ -113,6 +113,15 @@ pods-all-jupyter() {
     k get pod -A | rg jupyter- $@
 }
 
+pods-all-non-running() {
+    k get pod -A | rg -v Running $@
+}
+
+k-get-secret() {
+    k get secret -o go-template='{{range $k,$v := .data}}{{printf "%s: " $k}}{{if not $v}}{{$v}}{{else}}{{$v | base64decode}}{{end}}{{"\n"}}{{end}}' $@
+
+
+}
 ucb-data8x() {
     gcloud config set account yuvipanda@gmail.com
     gcloud config set project data8x-scratch
