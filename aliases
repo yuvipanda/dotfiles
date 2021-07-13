@@ -2,6 +2,7 @@
 # Aliases I like
 alias venv-gimme="source ~/code/dotfiles/venv-gimme-script"
 alias k="kubectl"
+alias kg="kubectl get"
 
 # Drain a node that is probably running jupyter things
 k-drain() {
@@ -81,6 +82,14 @@ hub-logs() {
     k -n ${NAMESPACE} logs ${HUB_NAME} -c hub $@
 }
 
+user-logs() {
+    NAMESPACE=$(hub-namespace-resolve $1)
+    shift 1
+    USER_NAME=$1
+    shift 1
+    k -n ${NAMESPACE} logs jupyter-${USER_NAME} -c notebook $@
+}
+
 hub-list-user-pods() {
     NAMESPACE=$(hub-namespace-resolve $1)
     shift 1
@@ -134,24 +143,36 @@ ucb-datahub-2018() {
     k config use-context gke_ucb-datahub-2018_us-central1_fall-2019
 }
 
+binder-prod() {
+    gcloud config set account yuvipanda@gmail.com
+    gcloud config set project binderhub-288415
+    k config use-context gke_binderhub-288415_us-central1_prod
+}
+
+binder-staging() {
+    gcloud config set account yuvipanda@gmail.com
+    gcloud config set project binderhub-288415
+    k config use-context gke_binderhub-288415_us-central1_prod
+}
+
 2i2c-utoronto() {
     k config use-context jupyterhub-2i2c-cluster
 }
 
 2i2c-low-touch() {
-    gcloud config set account yuvipanda@gmail.com
+    gcloud config set account yuvipanda@2i2c.org
     gcloud config set project two-eye-two-see
     k config use-context gke_two-eye-two-see_us-central1-b_low-touch-hubs-cluster
 }
 
 2i2c-cloudbank() {
-    gcloud config set account yuvipanda@gmail.com
+    gcloud config set account yuvipanda@2i2c.org
     gcloud config set project cb-1003-1696
     k config use-context gke_cb-1003-1696_us-central1-b_cloudbank-2i2c-cluster
 }
 
 2i2c-hackathon-alpha() {
-    gcloud config set account yuvipanda@gmail.com
+    gcloud config set account yuvipanda@2i2c.org
     gcloud config set project  hackathon-2i2c-project-alpha
     k config use-context gke_hackathon-2i2c-project-alpha_us-central1-b_alpha-cluster
 }
