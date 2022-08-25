@@ -1,0 +1,64 @@
+# Inserts a blank line between shell prompts
+add_newline = true
+
+format = """
+$python\
+$directory\
+$git_branch\
+$aws\
+$gcloud\
+$rust\
+$terraform\
+$conda\
+$kubernetes\
+$env_var\
+$custom\
+$cmd_duration\
+$line_break\
+$status\
+$shell\
+$character"""
+# Replace the "❯" symbol in the prompt with "➜"
+[character]                            # The name of the module we are configuring is "character"
+success_symbol = "[➜](bold green)"     # The "success_symbol" segment is being set to "➜" with the color "bold green"
+
+# Disable the package module, hiding it from the prompt completely
+[package]
+disabled = true
+
+[directory]
+style = 'green bold'
+
+[aws]
+format = '[aws:($profile)]($style) '
+style = 'blue'
+
+[gcloud]
+format = '[gcp:$project]($style) '
+style = 'yellow'
+
+[python]
+format = '${symbol}'
+
+[kubernetes]
+format = "[k:$context/$namespace]($style) "
+style = 'cyan'
+disabled = false
+
+[terraform]
+format = "[tf:$workspace]($style) "
+style = 'gray'
+disabled = true
+
+[git_commit]
+disabled = true
+
+[git_branch]
+format = "[g:$branch]($style) "
+style = "purple"
+
+[git_status]
+disabled = true
+
+[git_state]
+disabled = true
