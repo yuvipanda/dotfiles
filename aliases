@@ -3,6 +3,7 @@
 alias venv-gimme="source ~/code/dotfiles/venv-gimme-script"
 alias k="kubectl"
 alias kg="kubectl get"
+alias g="git"
 
 # Drain a node that is probably running jupyter things
 k-drain() {
