@@ -17,7 +17,7 @@ k-drain() {
 wk() {
     # I watch kubernetes resources all the time
     # I can do things like `wk 'get node | rg -v user'`
-    /usr/local/bin/watch "kubectl $@"
+    watch "kubectl $@"
 }
 
 k-non-running-pods() {
