@@ -62,3 +62,8 @@ disabled = true
 
 [git_state]
 disabled = true
+
+[env_var]
+variable = "SHELL_ARCH"
+style = "bold yellow"
+format = "[$env_value]($style) "
