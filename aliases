@@ -5,6 +5,9 @@ alias k="kubectl"
 alias kg="kubectl get"
 alias g="git"
 
+# Allow putting misc scripts under dotfiles/bin
+export PATH="${PATH}:${HOME}/code/dotfiles/bin"
+
 # Drain a node that is probably running jupyter things
 k-drain() {
     # We always wanna ignore daemonsets, duh
@@ -172,8 +175,3 @@ binder-staging() {
     k config use-context gke_cb-1003-1696_us-central1-b_cloudbank-2i2c-cluster
 }
 
-2i2c-hackathon-alpha() {
-    gcloud config set account yuvipanda@2i2c.org
-    gcloud config set project  hackathon-2i2c-project-alpha
-    k config use-context gke_hackathon-2i2c-project-alpha_us-central1-b_alpha-cluster
-}
