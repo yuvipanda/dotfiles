@@ -67,6 +67,10 @@ hub-exec() {
     k -n ${NAMESPACE} exec -it ${HUB_NAME} -c hub -- /bin/bash
 }
 
+prometheus-port-forward() {
+    POD_NAME="$(k -n support get pod -l app.kubernetes.io/name=prometheus  -o name)"
+    k -n support port-forward $POD_NAME 9090:9090
+}
 hub-scp-to() {
     NAMESPACE=$(hub-namespace-resolve $1)
     HUB_NAME="$(k -n ${NAMESPACE} get pod -o name -l component=hub | sed 's/pod\///')"
