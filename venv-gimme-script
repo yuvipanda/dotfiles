@@ -15,7 +15,7 @@ VENV_NAME=$(basename $(pwd))
 VENV_BASE_DIR=${HOME}/.local/share/virtualenvs
 VENV_PATH=${VENV_BASE_DIR}/${VENV_NAME}
 # Lets me use multiple python versions if homebrew is set up for it!
-VENV_VERSION=${PYTHON_VERSION:-11}
+VENV_VERSION=${PYTHON_VERSION:-13}
 
 if [ ! -f ${VENV_PATH}/bin/python ]; then
     python3.${VENV_VERSION} -m venv ${VENV_PATH}
